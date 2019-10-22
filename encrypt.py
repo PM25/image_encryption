@@ -7,10 +7,10 @@ from PIL import Image
 
 # Arguments
 parser = argparse.ArgumentParser(description="Image Encryption")
-parser.add_argument("--file", "-f", type=str, default="pm25.png", help="Path to image file.")
+parser.add_argument("--file", "-f", type=str, default="default.jpg", help="Path to image file.")
 parser.add_argument("--key", "-k", type=str, default="DefaultKey", help="Encryption Key.")
+parser.add_argument("--save", "-s", type=str, default="encrypted_image.jpg", help="File name for output image.")
 args = parser.parse_args()
-
 
 CROP_WIDTH = 16
 CROP_HEIGHT = 8
@@ -59,4 +59,4 @@ if __name__ == '__main__':
 
     # Numpy to PIL
     encrypted_image = Image.fromarray(encrypted_img*255)
-    encrypted_image.convert('RGB').save("encrypted_img.jpg")
+    encrypted_image.convert('RGB').save(args.save)

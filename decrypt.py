@@ -5,23 +5,23 @@ import argparse
 import numpy as np
 from PIL import Image
 
+# Arguments
+parser = argparse.ArgumentParser(description="Image Encryption")
+parser.add_argument("--file", "-f", type=str, default="encrypted_image.jpg", help="Path to encrypted image file.")
+parser.add_argument("--key", "-k", type=str, default="DefaultKey", help="Encryption Key.")
+parser.add_argument("--save", "-s", type=str, default="decrypted_image.jpg", help="File name for output image.")
+args = parser.parse_args()
+
 CROP_WIDTH = 16
 CROP_HEIGHT = 8
 
 
-# Arguments
-parser = argparse.ArgumentParser(description="Image Encryption")
-parser.add_argument("--file", "-f", type=str, default="encrypted_image.png", help="Path to encrypted image file.")
-parser.add_argument("--key", "-k", type=str, default="DefaultKey", help="Encryption Key.")
-args = parser.parse_args()
-
-
 
 if __name__ == '__main__':
-    crypt = MyCrypto(args.key)
+    mycrypto = MyCrypto(args.key)
 
     # Load image
-    encrypted_image = Image.open("encrypted_img.jpg")
+    encrypted_image = Image.open(args.file)
     encrypted_image = encrypted_image.convert('1')
 
     img_width, img_height = encrypted_image.size
@@ -40,7 +40,7 @@ if __name__ == '__main__':
         img_bytes = bytes(img_bytes)
 
         # Decrypt Crop image
-        decrypted_img_bytes = crypt.decrypt(img_bytes)
+        decrypted_img_bytes = mycrypto.decrypt(img_bytes)
 
         # Transform Bytes to bits format
         decrypted_img_bits = ''
@@ -61,4 +61,4 @@ if __name__ == '__main__':
     # Numpy to PIL
     decrypted_image = Image.fromarray(decrypted_img*255)
     decrypted_image.show()
-    decrypted_image.convert('RGB').save('decrypted_img.jpg')
+    decrypted_image.convert('RGB').save(args.save)
