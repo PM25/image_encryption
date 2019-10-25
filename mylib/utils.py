@@ -1,8 +1,10 @@
 import math
 import numpy as np
+from PIL import Image
 
 CROP_WIDTH = 16
 CROP_HEIGHT = 8
+
 
 def split_image(image, height, width):
     sub_images = []
@@ -28,3 +30,16 @@ def combine_image(images, width, height):
         li.append(tmp)
 
     return np.concatenate(li, axis=1)
+
+
+def expand_white_bg(image, crop_width, crop_height):
+    img_width, img_height = image.size
+    if(img_width % crop_width == 0 and img_height % crop_height == 0):
+        return image
+    else:    
+        new_width = img_width + (CROP_WIDTH - img_width % CROP_WIDTH)
+        new_height = img_height + (CROP_HEIGHT - img_height % CROP_HEIGHT)
+        bg_size = (new_width, new_height)
+        new_img = Image.new('RGB', bg_size, (255,255,255))
+        new_img.paste(image, (0, 0))
+        return new_img.convert('1')
